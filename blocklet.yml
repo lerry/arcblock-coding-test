@@ -1,5 +1,5 @@
 name: arcblock-coding-test
-title: arcblock-coding-test
+title: Arcblock Coding Test
 description: A Blocklet DAPP blocklet
 keywords:
   - blocklet
@@ -15,31 +15,31 @@ repository:
   url: git+https://github.com/blocklet/create-blocklet.git
 specVersion: 1.2.8
 version: 0.1.0
-logo: logo.png
+logo: public/logo.png
 files:
   - dist
-  - logo.png
+  - public/logo.png
   - screenshots
 interfaces:
   - type: web
     name: publicUrl
     path: /
-    prefix: "*"
+    prefix: '*'
     port: BLOCKLET_PORT
     protocol: http
-community: ""
-documentation: ""
-homepage: ""
-license: ""
+community: ''
+documentation: ''
+homepage: ''
+license: ''
 payment:
   price: []
   share: []
 timeout:
   start: 60
 requirements:
-  server: ">=1.16.28"
-  os: "*"
-  cpu: "*"
+  server: '>=1.16.28'
+  os: '*'
+  cpu: '*'
 scripts:
   dev: npm run start
 environments: []

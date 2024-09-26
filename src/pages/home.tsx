@@ -1,47 +1,41 @@
-import { useState } from 'react';
-import reactLogo from '../assets/react.svg';
-import blockletLogo from '../assets/blocklet.svg';
-import viteLogo from '../assets/vite.svg';
-import './home.css';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+
+import Navbar from '../components/navbar';
+import UserProfile from '../components/user-profile';
+import UserProfileSkeleton from '../components/user-profile-skeleton';
 import api from '../libs/api';
+import { UserProfileProps } from '../types';
 
 function Home() {
-  const [count, setCount] = useState(0);
+  const [profile, setProfile] = useState<UserProfileProps | null>(null);
+  const [loading, setLoading] = useState(true);
 
   async function getApiData() {
-    const { data } = await api.get('/api/data');
-    const { message } = data;
-    alert(`Message from api: ${message}`);
+    try {
+      setLoading(true);
+      const { data } = await api.get('/api/profile');
+      setProfile(data);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   }
+
+  useEffect(() => {
+    getApiData();
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-        <a href="https://www.arcblock.io/docs/blocklet-developer/getting-started" target="_blank" rel="noreferrer">
-          <img src={blockletLogo} className="logo blocklet" alt="Blocklet logo" />
-        </a>
-      </div>
-      <h1>Vite + React + Blocklet</h1>
-      <div className="card">
-        <button type="button" onClick={() => setCount((currentCount) => currentCount + 1)}>
-          count is {count}
-        </button>
-        <br />
-        <br />
-        <button type="button" onClick={getApiData}>
-          Get API Data
-        </button>
-        <p>
-          Edit <code>src/app.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
+      <Navbar />
+      <main className="container mx-auto max-w-5xl flex-grow">
+        <section className="flex flex-col items-center justify-center px-2 md:px-0 py-10">
+          {loading && <UserProfileSkeleton />}
+          {!loading && profile ? <UserProfile initialProfile={profile} /> : <p>Error loading profile</p>}
+        </section>
+      </main>
     </>
   );
 }
